@@ -1,0 +1,70 @@
+{
+  "env": {
+    "es6": true,
+    "es2020": true,
+    "jest": true,
+    "jest/globals": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 11,
+    "sourceType": "module",
+    "project": "./tsconfig.eslint.json",
+    "files": ["*.ts", "*.tsx"] // Your TypeScript files extension
+  },
+  "plugins": ["@typescript-eslint", "eslint-plugin-jest", "jest", "prettier"],
+  "settings": {
+    "jest": {
+      "version": 26
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".d.ts"]
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.test.ts",
+        "*.spec.ts",
+        "*.integration.ts",
+        "*.component.ts",
+        "*.e2e.ts",
+        "*.test.helper.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-explicit-any": "warn"
+      }
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unsafe-assignment": 0,
+    "@typescript-eslint/no-unsafe-call": 0,
+    "@typescript-eslint/no-unsafe-argument": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-unsafe-member-access": 0,
+    "@typescript-eslint/restrict-template-expressions": 0,
+
+    // Jest Plugin
+    // The following rules are made available via `eslint-plugin-jest`.
+    "jest/no-disabled-tests": 1,
+    "jest/no-focused-tests": 1,
+    "jest/no-identical-title": 1,
+    "jest/valid-expect": 1,
+    "prettier/prettier": "off"
+  }
+}

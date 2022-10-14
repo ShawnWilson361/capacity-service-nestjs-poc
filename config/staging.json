@@ -1,0 +1,8 @@
+{
+  "db": {
+    "port": 5432
+  },
+  "sequelize": {
+    "logging": false
+  }
+}

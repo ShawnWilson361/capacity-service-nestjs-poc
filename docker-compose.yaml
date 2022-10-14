@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    environment:
+      - DB_HOST=postgres
+      - NODE_ENV=production
+    ports:
+      - 4003:4003
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bourne
+    ports:
+      - 8543:5432

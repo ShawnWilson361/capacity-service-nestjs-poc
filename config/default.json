@@ -1,0 +1,24 @@
+{
+  "applicationName": "service-haven-shared-boilerplate",
+  "server": {
+    "port": 4003
+  },
+  "trace-header": "x-trace-id",
+  "guest-reference-id-header": "x-guest-reference-id",
+  "booking-reference-id-header": "x-booking-reference-id",
+  "team-member-booking-header": "x-team-member-booking",
+  "db": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "bourne",
+    "host": "localhost",
+    "port": 8543,
+    "dialect": "postgres"
+  },
+  "sequelize": {
+    "logging": false
+  },
+  "swagger-enabled": "1",
+  "service-info-api-key": "6163f66b-cc34-44b1-ab69-75ae295e488e",
+  "admin-api-key": "dbc9f3b1-8918-45ab-abe8-e757e272dc63"
+}

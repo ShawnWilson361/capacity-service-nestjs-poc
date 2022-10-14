@@ -1,0 +1,16 @@
+{
+  "sequelize": {
+    "logging": false
+  },
+  "db": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "bourne",
+    "host": "localhost",
+    "port": 9001,
+    "dialect": "postgres"
+  },
+  "health-api-key": "test",
+  "service-info-api-key": "test",
+  "admin-api-key": "test"
+}

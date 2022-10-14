@@ -1,0 +1,9 @@
+{
+  "db": {
+    "port": 5432
+  },
+  "sequelize": {
+    "logging": false
+  },
+  "swagger-enabled": "0"
+}

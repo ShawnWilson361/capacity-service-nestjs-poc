@@ -1,0 +1,12 @@
+import { Repository } from 'typeorm';
+import { CustomRepository } from '../decorators/typeorm-ex.decorator';
+
+import { {{properCase name}} } from '../entities';
+
+@CustomRepository({{properCase name}})
+export class {{properCase name}}Repository extends Repository<{{properCase name}}> {
+  /* Find One */
+  async find{{properCase name}}(id: string): Promise<{{properCase name}} | undefined> {
+    return await this.findOne({ where: { id } }) || undefined;
+  }
+}

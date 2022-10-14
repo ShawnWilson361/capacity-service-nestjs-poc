@@ -1,0 +1,9 @@
+dist
+.Dockerignore
+.vscode
+node_modules
+test
+.editorconfig
+.env.example
+.gitignore
+README.md

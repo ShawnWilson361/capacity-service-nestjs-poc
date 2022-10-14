@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: capacity-service-jest-db
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bourne
+    ports:
+      - 9001:5432
