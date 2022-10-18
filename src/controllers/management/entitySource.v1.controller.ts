@@ -101,24 +101,18 @@ export class EntitySourceV1Controller {
   @ApiOperation({ summary: 'Get list of entity sources' })
   @Get('/')
   async getEntitySources(
-    @Query('filters') filters?: string,
+    @Query('filters') filters?: ManagementEntitySourceFilters,
     @Query('page') page = 0,
     @Query('limit') limit = 50,
     @Query('orderBy') orderBy = 'id',
     @Query('orderDirection') orderDirection = OrderDirection.Asc
   ): Promise<ManagementEntitySourceListResponse> {
-    let filtersObj: ManagementEntitySourceFilters;
-
-    if (filters) {
-      filtersObj = JSON.parse(filters) as ManagementEntitySourceFilters;
-    }
-
     return await this.entitySourceService.getEntitySources({
       limit,
       orderBy,
       orderDirection,
       page,
-      filters: filtersObj,
+      filters,
     });
   }
 
@@ -168,7 +162,12 @@ export class EntitySourceV1Controller {
   async createEntitySource(
     @Body() body: ManagementEntitySourcePayload
   ): Promise<ManagementEntitySourceResponse> {
-    return await this.entitySourceService.createEntitySource(body);
+    return await this.entitySourceService.createEntitySource({
+      ...body.entitySource,
+      createdAt: undefined,
+      updatedAt: undefined,
+      deletedAt: undefined,
+    });
   }
 
   @ApiOkResponse({
@@ -191,9 +190,16 @@ export class EntitySourceV1Controller {
   @ApiParam({ name: 'id', type: String })
   @Put('/:id')
   async updateEntitySource(
+    @Param('id') id: string,
     @Body() body: ManagementEntitySourcePayload
   ): Promise<ManagementEntitySourceResponse> {
-    return await this.entitySourceService.updateEntitySource(body);
+    return await this.entitySourceService.updateEntitySource({
+      ...body.entitySource,
+      id,
+      createdAt: undefined,
+      updatedAt: undefined,
+      deletedAt: undefined,
+    });
   }
 
   @ApiOkResponse({

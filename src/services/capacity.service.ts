@@ -125,7 +125,7 @@ export class CapacityService {
 
     return {
       success: true,
-      item: mapCapacityToManagementCapacityItem(item),
+      capacity: mapCapacityToManagementCapacityItem(item),
     };
   }
 
@@ -174,7 +174,7 @@ export class CapacityService {
   async replaceCapacity(
     capacityInfoList: CapacityInfo[],
     guestReferenceId: string
-  ): Promise<void> {
+  ): Promise<Capacity[]> {
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -204,11 +204,16 @@ export class CapacityService {
 
         if (capacityChange.amount !== 0) {
           await this.capacityChangeRepository.createCapacityChange(
-            capacityChange
+            capacityChange,
+            queryRunner
           );
         }
+
+        capacities.push(updatedCapacity);
       }
+
       await queryRunner.commitTransaction();
+      return capacities;
     } catch (e) {
       this.logger.error(e);
       await queryRunner.rollbackTransaction();

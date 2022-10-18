@@ -176,7 +176,7 @@ export class CapacityV1Controller {
       $ref: getSchemaPath(ErrorResponse),
     },
   })
-  @ApiOperation({ summary: 'Create one or many capacities' })
+  @ApiOperation({ summary: 'Create a capacity' })
   @Post('/')
   async createCapacity(
     @Body() body: PublicCapacityPayload

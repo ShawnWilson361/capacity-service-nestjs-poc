@@ -8,6 +8,8 @@ import {
   EntitySourceRepository,
 } from '../repositories';
 import { CapacityService } from '../services/capacity.service';
+import { CapacityChangeService } from '../services/capacityChange.service';
+import { CapacityValidationService } from '../services/capacityValidation.service';
 import { EntitySourceService } from '../services/entitySource.service';
 import { provideCustomRepository } from '../utils/provideCustomRepository';
 
@@ -16,6 +18,8 @@ import { provideCustomRepository } from '../utils/provideCustomRepository';
   controllers: [CapacityV1Controller],
   providers: [
     CapacityService,
+    CapacityChangeService,
+    CapacityValidationService,
     EntitySourceService,
     Logger,
     provideCustomRepository(Capacity, CapacityRepository),

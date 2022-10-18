@@ -35,10 +35,10 @@ export class EntitySourceRepository extends Repository<EntitySource> {
 
     query = query.take(paginationOptions.limit || 50);
     query = query.skip(
-      (paginationOptions.page || 50) * (paginationOptions.limit || 50)
+      (paginationOptions.page || 0) * (paginationOptions.limit || 50)
     );
     query = query.orderBy(
-      paginationOptions.orderBy,
+      `"entitySource".${paginationOptions.orderBy}`,
       paginationOptions.orderDirection
     );
 
@@ -67,7 +67,8 @@ export class EntitySourceRepository extends Repository<EntitySource> {
     partial: Partial<EntitySource>
   ): Promise<EntitySource> {
     const result = await this.createQueryBuilder()
-      .update(partial)
+      .update(EntitySource)
+      .set(partial)
       .where({
         id: partial.id,
       })
@@ -77,8 +78,30 @@ export class EntitySourceRepository extends Repository<EntitySource> {
     return result.raw[0] as EntitySource;
   }
 
+  /* Upsert */
+  async upsertEntitySource(
+    partial: Partial<EntitySource>
+  ): Promise<EntitySource> {
+    const exists = await this.doesExist(partial.id);
+
+    if (exists) {
+      return await this.updateEntitySource(partial);
+    } else {
+      return await this.createEntitySource(partial);
+    }
+  }
+
   /* Delete */
   async deleteEntitySource(id: string): Promise<void> {
     await this.delete(id);
+  }
+
+  /* Query */
+  async doesExist(id: string): Promise<boolean> {
+    const entitySource = await this.findOne({
+      where: { id },
+    });
+
+    return Boolean(entitySource);
   }
 }

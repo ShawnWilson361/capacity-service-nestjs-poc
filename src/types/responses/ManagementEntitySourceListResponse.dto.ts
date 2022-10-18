@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber } from 'class-validator';
 
 import { ManagementEntitySourceItem } from '../shared';
 import { ManagementEntitySourceListQuery } from './ManagementEntitySourceListQuery.dto';

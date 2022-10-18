@@ -37,6 +37,9 @@ import {
   EntitySourceRepository,
 } from './repositories';
 import { AppService } from './services/app.service';
+import { CapacityService } from './services/capacity.service';
+import { CapacityChangeService } from './services/capacityChange.service';
+import { CapacityValidationService } from './services/capacityValidation.service';
 import { ConfigService } from './services/config.service';
 import { EntitySourceService } from './services/entitySource.service';
 import { isLocal } from './utils/isLocal';
@@ -78,6 +81,9 @@ if (isLocal) {
     ConfigService,
     NestJsConfigService,
     EntitySourceService,
+    CapacityService,
+    CapacityChangeService,
+    CapacityValidationService,
     AppService,
     Logger,
     provideCustomRepository(Capacity, CapacityRepository),
@@ -106,12 +112,9 @@ export class AppModule {
     consumer
       .apply(ServiceInfoApiKeyCheckMiddleware)
       .forRoutes(ServiceInfoController);
-
     consumer
       .apply(ServiceInfoApiKeyCheckMiddleware)
-      .forRoutes(ServiceInfoController);
-    consumer.apply(AdminApiKeyCheckMiddleware).forRoutes(ServiceInfoController);
-    consumer.apply(AdminApiKeyCheckMiddleware).forRoutes(HealthController);
+      .forRoutes(HealthController);
     consumer
       .apply(AdminApiKeyCheckMiddleware)
       .forRoutes(EntitySourceV1Controller);

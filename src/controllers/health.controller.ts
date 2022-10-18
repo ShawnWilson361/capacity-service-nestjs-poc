@@ -1,7 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiHeader,
   ApiOkResponse,
   ApiTags,
@@ -16,7 +15,12 @@ import { ErrorResponse, GetHealthResponse } from '../types/responses';
   description: 'set a custom request id for the request',
   schema: { type: 'string' },
 })
-@ApiBearerAuth()
+@ApiHeader({
+  name: ' x-api-key',
+  description: 'the capacity service api key',
+  schema: { type: 'string' },
+})
+@ApiTags('Infrastructure')
 @Controller('_health')
 export class HealthController {
   @ApiOkResponse({
@@ -36,7 +40,6 @@ export class HealthController {
       $ref: getSchemaPath(ErrorResponse),
     },
   })
-  @ApiTags('Infrastructure')
   @Get('/')
   getHealth(): GetHealthResponse {
     return {

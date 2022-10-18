@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 import { PublicCapacityItem } from '../shared';
 

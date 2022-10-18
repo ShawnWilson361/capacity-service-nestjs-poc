@@ -1,3 +1,5 @@
+/* prettier-ignore */
+
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNumber } from 'class-validator';
 

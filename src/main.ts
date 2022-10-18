@@ -7,6 +7,7 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import * as chalk from 'chalk';
 import * as config from 'config';
 import { SwaggerTheme } from 'swagger-themes';
 
@@ -135,7 +136,9 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  logger.log(`🚀 Capacity service is now listening on port ${port} 🚀`);
+  logger.log(
+    `🚀 ${chalk.blue('Capacity service')} is now listening on port ${port} 🚀`
+  );
 }
 
 bootstrap();

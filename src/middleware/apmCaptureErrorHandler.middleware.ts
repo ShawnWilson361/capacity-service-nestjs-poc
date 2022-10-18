@@ -1,10 +1,10 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 
-import { captureError } from '@havenengineering/module-shared-apm';
+// import { captureError } from '@havenengineering/module-shared-apm';
 
-import { ErrorWithLabels } from '../errors/ErrorWithLabels.error';
-import { isErrorWithLabels } from '../utils/isErrorWithLabels';
+// import { ErrorWithLabels } from '../errors/ErrorWithLabels.error';
+// import { isErrorWithLabels } from '../utils/isErrorWithLabels';
 
 @Injectable()
 export class ApmCaptureErrorHandlerMiddleware implements NestMiddleware {

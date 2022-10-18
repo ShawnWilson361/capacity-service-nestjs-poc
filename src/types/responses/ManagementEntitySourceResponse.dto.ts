@@ -9,5 +9,5 @@ export class ManagementEntitySourceResponse {
   success?: boolean;
 
   @ApiProperty({ type: ManagementEntitySourceItem })
-  item?: ManagementEntitySourceItem;
+  entitySource?: ManagementEntitySourceItem;
 }

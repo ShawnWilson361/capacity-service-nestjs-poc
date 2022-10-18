@@ -9,6 +9,7 @@ import {
 import { v4 as uuid } from 'uuid';
 
 import { Capacity } from '../entities';
+import { ApplicationError } from '../errors/ApplicationError.error';
 import { ManagementCapacityFilters } from '../types/queryParams';
 import { ListOptions, Paginated } from '../types/shared';
 
@@ -59,10 +60,10 @@ export class CapacityRepository extends Repository<Capacity> {
 
     query = query.take(paginationOptions.limit || 50);
     query = query.skip(
-      (paginationOptions.page || 50) * (paginationOptions.limit || 50)
+      (paginationOptions.page || 0) * (paginationOptions.limit || 50)
     );
     query = query.orderBy(
-      paginationOptions.orderBy,
+      `"capacity"."${paginationOptions.orderBy}"`,
       paginationOptions.orderDirection
     );
 
@@ -106,9 +107,7 @@ export class CapacityRepository extends Repository<Capacity> {
       .returning('*')
       .execute();
 
-    return this.save(
-      this.create(res.generatedMaps[0] as DeepPartial<Capacity>)
-    );
+    return this.create(res.generatedMaps[0] as DeepPartial<Capacity>);
   }
 
   async createCapacities(partials: Partial<Capacity>[]): Promise<Capacity[]> {
@@ -140,12 +139,17 @@ export class CapacityRepository extends Repository<Capacity> {
     }
 
     const result = await qr
-      .update(partial)
+      .update(Capacity)
+      .set(partial)
       .where({
-        id: partial.id,
+        entityId: partial.entityId,
       })
       .returning('*')
       .execute();
+
+    if (result.affected < 1) {
+      throw new ApplicationError('No update', 400);
+    }
 
     return result.raw[0] as Capacity;
   }
@@ -167,18 +171,27 @@ export class CapacityRepository extends Repository<Capacity> {
 
     let query = qr
       .update(Capacity)
-      .set({ usedCapacity: () => `usedCapacity + ${amount}` })
+      .set({ usedCapacity: () => `"Capacities"."usedCapacity" + ${amount}` })
       .where({ id: capacityId, usedCapacity: currentUsedCapacity });
 
     if (!teamMemberBooking && amount > 0) {
-      query = query.andWhere('maxCapacity >= usedCapacity + :amount', {
-        amount,
-      });
+      query = query.andWhere(
+        '"Capacities"."maxCapacity" >= "Capacities"."usedCapacity" + :amount',
+        {
+          amount,
+        }
+      );
     }
 
-    query = query.andWhere(`0 <= usedCapacity + :amount`, { amount });
+    query = query.andWhere(`0 <= "Capacities"."usedCapacity" + :amount`, {
+      amount,
+    });
 
     const result = await query.execute();
+
+    if (result.affected < 1) {
+      throw new ApplicationError('No update', 400);
+    }
 
     return result.raw[0] as Capacity;
   }
@@ -188,13 +201,23 @@ export class CapacityRepository extends Repository<Capacity> {
     partial: Partial<Capacity>,
     queryRunner?: QueryRunner
   ): Promise<Capacity> {
-    const exists =
-      partial.id && (await this.doesExist(partial.id, partial.entitySourceId));
+    const exists = await this.doesExist(
+      partial.entityId,
+      partial.entitySourceId
+    );
 
     if (exists) {
-      return this.updateCapacity(partial, queryRunner);
+      return await this.updateCapacity(partial, queryRunner);
     } else {
-      return this.createCapacity(partial, queryRunner);
+      if (typeof partial.usedCapacity !== 'number') {
+        throw new ApplicationError(
+          `"usedCapacity" is required for new capacity insert (entityId: ${partial.entityId})`,
+          400,
+          'BAD_REQUEST'
+        );
+      }
+
+      return await this.createCapacity(partial, queryRunner);
     }
   }
 
@@ -204,8 +227,10 @@ export class CapacityRepository extends Repository<Capacity> {
   }
 
   /* Query */
-  async doesExist(id: string, entitySourceId: string): Promise<boolean> {
-    const capacity = await this.findOne({ where: { id, entitySourceId } });
+  async doesExist(entityId: string, entitySourceId: string): Promise<boolean> {
+    const capacity = await this.findOne({
+      where: { entityId, entitySourceId },
+    });
 
     return Boolean(capacity);
   }

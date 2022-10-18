@@ -105,24 +105,18 @@ export class CapacityV1Controller {
   @ApiOperation({ summary: 'Get list of capacities' })
   @Get('/')
   async getCapacityList(
-    @Query('filters') filters?: string,
+    @Query('filters') filters?: ManagementCapacityFilters,
     @Query('page') page = 0,
     @Query('limit') limit = 50,
     @Query('orderBy') orderBy = 'id',
     @Query('orderDirection') orderDirection = OrderDirection.Asc
   ): Promise<ManagementCapacityListResponse> {
-    let filtersObj: ManagementCapacityFilters;
-
-    if (filters) {
-      filtersObj = JSON.parse(filters) as ManagementCapacityFilters;
-    }
-
     return await this.capacityService.getCapacities({
       limit,
       orderBy,
       orderDirection,
       page,
-      filters: filtersObj,
+      filters,
     });
   }
 
@@ -152,7 +146,7 @@ export class CapacityV1Controller {
 
     return {
       success: true,
-      item: mapCapacityToManagementCapacityResponseItem(item),
+      capacity: mapCapacityToManagementCapacityResponseItem(item),
     };
   }
 
@@ -186,7 +180,7 @@ export class CapacityV1Controller {
 
     return {
       success: true,
-      item: mapCapacityToManagementCapacityItem(item),
+      capacity: mapCapacityToManagementCapacityItem(item),
     };
   }
 

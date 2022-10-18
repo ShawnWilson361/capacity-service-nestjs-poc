@@ -1,5 +1,5 @@
 import { AsyncContext } from '@nestjs-steroids/async-context';
-import { Inject, Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService as NestJsConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
@@ -75,7 +75,7 @@ export class EntitySourceService {
     if (!entitySourceId) {
       throw new ApplicationError(
         'Missing entity source Id',
-        400,
+        401,
         'missing entity source id'
       );
     }
@@ -119,7 +119,7 @@ export class EntitySourceService {
 
     return {
       success: true,
-      item: mapEntitySourceToManagementEntitySourceItem(item),
+      entitySource: mapEntitySourceToManagementEntitySourceItem(item),
     };
   }
 
@@ -130,7 +130,7 @@ export class EntitySourceService {
 
     return {
       success: true,
-      item: mapEntitySourceToManagementEntitySourceItem(item),
+      entitySource: mapEntitySourceToManagementEntitySourceItem(item),
     };
   }
 
@@ -141,7 +141,7 @@ export class EntitySourceService {
 
     return {
       success: true,
-      item: mapEntitySourceToManagementEntitySourceItem(item),
+      entitySource: mapEntitySourceToManagementEntitySourceItem(item),
     };
   }
 

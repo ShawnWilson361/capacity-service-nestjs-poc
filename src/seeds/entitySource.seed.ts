@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 import { EntitySource } from '../entities';
 
 const seedData = (): EntitySource[] => {

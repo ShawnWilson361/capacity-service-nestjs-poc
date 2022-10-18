@@ -9,5 +9,5 @@ export class ManagementCapacityResponse {
   success?: boolean;
 
   @ApiProperty({ type: ManagementCapacityResponseItem })
-  item?: ManagementCapacityResponseItem;
+  capacity?: ManagementCapacityResponseItem;
 }

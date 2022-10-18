@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { ConfigService } from '../services/config.service';
 import { ApiKeyCheckMiddleware } from './apiKeyCheck.middleware';

@@ -9,12 +9,14 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
+import { CapacityService } from '../../services/capacity.service';
 import { ConfigService } from '../../services/config.service';
 import { PublicCapacityOverridePayload } from '../../types/requestBody';
 import {
   ErrorResponse,
   PublicCapacityCompatibilityModificationResponse,
 } from '../../types/responses';
+import { mapCapacityToPublicCapacityItem } from '../../utils/mappers.ts';
 
 @ApiHeader({
   name: 'x-trace-id',
@@ -34,6 +36,8 @@ export class CapacityV1CompatibilityController {
   private readonly guestReferenceIdHeaderKey: string;
 
   constructor(
+    @Inject(CapacityService)
+    private readonly capacityService: CapacityService,
     @Inject(ConfigService)
     private readonly configService: ConfigService
   ) {
@@ -72,10 +76,14 @@ export class CapacityV1CompatibilityController {
   ): Promise<PublicCapacityCompatibilityModificationResponse> {
     const guestReferenceId = headers[this.guestReferenceIdHeaderKey] as string;
 
-    body.items;
+    const items = await this.capacityService.replaceCapacity(
+      body.items,
+      guestReferenceId
+    );
 
-    await Promise.resolve();
-
-    return;
+    return {
+      success: true,
+      items: items.map((item) => mapCapacityToPublicCapacityItem(item)),
+    };
   }
 }

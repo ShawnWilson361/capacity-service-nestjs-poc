@@ -3,3 +3,5 @@
 .yarn
 coverage
 .plop
+
+Paginated.dto.ts

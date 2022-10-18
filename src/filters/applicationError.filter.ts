@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 import { HttpError } from '@havenengineering/module-shared-typedrouter';
 

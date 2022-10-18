@@ -5,7 +5,6 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { Capacity, CapacityChange } from '../entities';
 import { ApplicationErrorList } from '../errors/ApplicationErrorList.error';
 import { CapacityChangeRepository, CapacityRepository } from '../repositories';
-import { PublicCapacityModificationResponse } from '../types/responses';
 import { CapacityModificationRequest } from '../types/shared';
 import { PublicCapacityModificationItem } from '../types/shared/PublicCapacityModificationItem.dto';
 import { CapacityValidationService } from './capacityValidation.service';
@@ -176,6 +175,7 @@ export class CapacityChangeService {
         'VALIDATION_ERROR'
       );
     }
+
     return validatedModificationRequests;
   }
 
@@ -185,6 +185,7 @@ export class CapacityChangeService {
   ) {
     for (const { change, context } of modificationRequests) {
       let amountToDoNotFallBelowZero = change.amount;
+
       if (
         amountToDoNotFallBelowZero < 0 &&
         context.capacity.usedCapacity + amountToDoNotFallBelowZero < 0

@@ -16,6 +16,12 @@ import { ErrorResponse, GetServiceInfoResponse } from '../types/responses';
   description: 'set a custom request id for the request',
   schema: { type: 'string' },
 })
+@ApiHeader({
+  name: ' x-api-key',
+  description: 'the capacity service api key',
+  schema: { type: 'string' },
+})
+@ApiTags('Infrastructure')
 @Controller('/service-info')
 export class ServiceInfoController {
   constructor(
@@ -39,12 +45,6 @@ export class ServiceInfoController {
     schema: {
       $ref: getSchemaPath(ErrorResponse),
     },
-  })
-  @ApiTags('Infrastructure')
-  @ApiHeader({
-    name: ' x-api-key',
-    description: 'the capacity service api key',
-    schema: { type: 'string' },
   })
   @Get('/')
   async getServiceInfo(): Promise<GetServiceInfoResponse> {
