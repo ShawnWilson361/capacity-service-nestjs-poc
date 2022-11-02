@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ .Values.deployments.name }}
+  type: {{ .Values.deployments.service.type }}
+  ports:
+    - port: {{ .Values.deployments.service.containerPort }}
+      targetPort: {{ .Values.deployments.service.containerPort }}
+      protocol: {{ .Values.deployments.service.protocol }}
+      name: {{ .Values.deployments.service.name }}
+  selector:
+    {{- include "selector.labels" . | nindent 4 }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  endpoints:
+  - interval: 30s
+    port: {{ .Values.deployments.service.name }}
+    path: {{ .Values.deployments.service.metricsPath }}
+  selector:
+    matchLabels:
+    {{- include "selector.labels" . | nindent 6 }}

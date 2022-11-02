@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.deployments.labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end}}
+spec:
+  replicas:  {{ .Values.deployments.replicaCount }}
+  strategy:
+    type: {{ .Values.deployments.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "selector.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "common.labels" . | nindent 8 }}
+        {{- range $key, $val := .Values.deployments.labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end}}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      serviceAccountName: {{ .Values.deployments.name }}
+      containers:
+      - name: {{ .Values.deployments.name }}
+        image: {{ .Values.deployments.image.repository }}:{{ .Values.deployments.image.tag }}
+        imagePullPolicy: Always
+        env:
+        {{- range $k, $v := .Values.deployments.env }}
+        - name: {{ $k | upper }}
+          value: {{ $v | quote }}
+        {{- end }}
+        {{- if len .Values.external_secrets }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.deployments.name }}
+        {{- end }}
+        ports:
+        - name: {{ .Values.deployments.service.name }}
+          containerPort: {{ .Values.deployments.service.containerPort }}
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.deployments.service.healthcheckPath }}
+            port: {{ .Values.deployments.service.containerPort }}
+          initialDelaySeconds: {{ .Values.liveness_probe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.liveness_probe.periodSeconds }}
+          timeoutSeconds: {{ .Values.liveness_probe.timeoutSeconds }}
+          failureThreshold: {{ .Values.liveness_probe.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.deployments.service.healthcheckPath }}
+            port: {{ .Values.deployments.service.containerPort }}
+          initialDelaySeconds: {{ .Values.readiness_probe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readiness_probe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readiness_probe.timeoutSeconds }}
+          failureThreshold: {{ .Values.readiness_probe.failureThreshold }}
+        resources:
+          {{- toYaml .Values.deployments.resources | nindent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+    {{- end }}
+    {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+    {{- end }}

@@ -1,0 +1,53 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.environment }}-{{ .Values.deployments.name }}-alb
+  namespace: {{ .Values.environment }}-{{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+  {{- range $path := .Values.ingress.paths }}
+  {{- if $.Values.ingress.additionalHosts.enabled }}
+    {{- range $host:= $.Values.ingress.additionalHosts.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: ssl-redirect
+                port: 
+                  name: use-annotation
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: {{ $.Values.deployments.name }}
+                port: 
+                  number: {{ $.Values.deployments.service.containerPort }}
+            path: {{ $path }}
+            pathType: ImplementationSpecific
+    {{- end }}
+  {{- end }}
+    - host: {{ $.Values.deployments.name }}.{{ $.Values.environment }}.digitaldevs.co.uk
+      http:
+        paths:
+          - backend:
+              service:
+                name: ssl-redirect
+                port: 
+                  name: use-annotation
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: {{ $.Values.deployments.name }}
+                port: 
+                  number: {{ $.Values.deployments.service.containerPort }}
+            path: {{ $path }}
+            pathType: ImplementationSpecific
+  {{- end }}
+{{- end }}

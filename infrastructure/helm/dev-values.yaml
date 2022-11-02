@@ -1,0 +1,104 @@
+# YAML-formatted values file for Haven-Activities-Service in DEV.
+
+environment: dev
+namespace: dev-haven-activities
+
+# ALB-Ingress-Controller configuration
+ingress:
+  enabled: true
+  annotations:
+    'alb.ingress.kubernetes.io/actions.ssl-redirect': '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    'alb.ingress.kubernetes.io/healthcheck-path': '/_health'
+    'alb.ingress.kubernetes.io/listen-ports': '[{"HTTP": 80}, {"HTTPS":443}]'
+    'alb.ingress.kubernetes.io/scheme': 'internet-facing'
+    'alb.ingress.kubernetes.io/ssl-policy': 'ELBSecurityPolicy-TLS-1-2-Ext-2018-06'
+    'alb.ingress.kubernetes.io/group.name': 'activities'
+    'alb.ingress.kubernetes.io/group.order': '26'
+    'kubernetes.io/ingress.class': 'alb'
+  paths:
+    - '/*'
+  additionalHosts:
+    enabled: false
+
+deployments:
+  name: service-haven-activities-capacity
+  replicaCount: 2
+  strategyType: RollingUpdate
+  image:
+    repository: 753707732315.dkr.ecr.eu-west-1.amazonaws.com/experience/service-haven-activities-capacity
+    tag: latest # Will be changed by Jenkins during build & deployment
+  labels:
+    admission.datadoghq.com/enabled: 'true'
+    tags.datadoghq.com/env: 'development'
+    tags.datadoghq.com/service: 'service-haven-activities-capacity'
+    tags.datadoghq.com/version: latest # Will be changed by Jenkins during build & deployment
+  service:
+    type: NodePort
+    name: http
+    protocol: TCP
+    containerPort: 4003
+    healthcheckPath: '/_health'
+  resources:
+    limits:
+      cpu: 512m
+      memory: 512Mi
+    requests:
+      cpu: 256m
+      memory: 256Mi
+  # env vars
+  env:
+    node_env: 'production'
+    node_config_env: 'dev'
+    notification_service_url: 'http://service-haven-shared-cello.dev-haven-activities.svc:4000'
+    dd_trace_sample_rate: '1'
+
+# Liveness & Readiness probe settings
+liveness_probe:
+  initialDelaySeconds: 60
+  periodSeconds: 20
+  timeoutSeconds: 10
+  failureThreshold: 6
+
+readiness_probe:
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 12
+
+# Pod autoscaling configuration
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Cronjobs settings
+cronjob:
+  enabled: false
+  schedule: '*/1 * * * *'
+  startingDeadlineSeconds: 30
+  concurrencyPolicy: Forbid
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 120
+
+# Node labels for pod assignment - Ref: https://kubernetes.io/docs/user-guide/node-selection/
+# Restricting pod to same AWS AZ where the EBS volumes are created.
+# Created a Storage Class which creates volumes just in 'eu-west-1c' AZ, hence the node selector label
+nodeSelector: {}
+
+# Affinity for pod assignment - Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+affinity: {}
+
+# Tolerations for pod assignment - Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+
+# List values that k8s-external-secrets should pull from AWS Secrets Manager
+external_secrets:
+  - DB_USER_NAME
+  - DB_USER_PASSWORD
+  - DB_HOST
+  - DB_NAME
+  - ADMIN_API_KEY
+  - SERVICE_INFO_API_KEY
+  - ACTIVITIES_INTERNAL_API_KEY

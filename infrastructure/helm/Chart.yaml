@@ -1,0 +1,4 @@
+apiVersion: v2
+description: service-haven-activities-capacity Helm template
+name: service-haven-activities-capacity
+version: 2.0.0

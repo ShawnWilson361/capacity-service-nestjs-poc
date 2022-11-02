@@ -1,0 +1,32 @@
+{{- if .Values.cronjob.enabled -}}
+apiVersion: cronjob/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.environment }}-haven-activities
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  startingDeadlineSeconds: {{ .Values.cronjob.startingDeadlineSeconds }}
+  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | quote }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.cronjob.backoffLimit }}
+      ttlSecondsAfterFinished: {{ .Values.cronjob.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            {{- include "common.labels" . | nindent 12 }}
+        spec:
+          containers:
+          - name: {{ .Values.name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+            envFrom:
+            - secretRef:
+                name: {{ .Values.deployments.name }}
+            command: ["ls"]
+            args: ["-l", "-t", "-r"]
+          restartPolicy: Never
+{{- end }}

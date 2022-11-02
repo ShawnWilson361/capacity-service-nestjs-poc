@@ -1,0 +1,343 @@
+{
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "dc6c9c41-5696-4576-843a-460ca867f734",
+        "reference": "s3://aws-shared-chartmuseum-s3/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/staging-values.yaml",
+        "type": "s3/object"
+      },
+      "displayName": "staging-service-haven-activities-capacity-values",
+      "id": "a7abe8d1-6283-4848-bcfc-6ecce70679ee",
+      "matchArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "14471e5d-2547-4f23-b9bd-204fa515df26",
+        "name": "s3://aws-shared-chartmuseum-s3/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/staging-values.yaml",
+        "type": "s3/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "cad0284f-0725-49a1-b8f9-402186ffe7f9",
+        "reference": "s3://aws-shared-chartmuseum-s3/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/prod-values.yaml",
+        "type": "s3/object"
+      },
+      "displayName": "prod-service-haven-activities-capacity-values",
+      "id": "c7704532-bc99-4cf2-801f-ea077394aac4",
+      "matchArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "eeab0d7d-dff4-4a35-8ca7-2f174630a725",
+        "name": "s3://aws-shared-chartmuseum-s3/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/prod-values.yaml",
+        "type": "s3/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "chartmuseum",
+        "id": "77bbdb3e-9c29-44ca-a64b-f6952622858e",
+        "name": "service-haven-activities-capacity",
+        "type": "helm/chart"
+      },
+      "displayName": "service-haven-activities-capacity-chart",
+      "id": "f3fc5760-ec82-46e5-b145-95b91d0b987b",
+      "matchArtifact": {
+        "artifactAccount": "chartmuseum",
+        "id": "40fef2b4-9083-490e-b2b8-34cb45d8287e",
+        "name": "service-haven-activities-capacity",
+        "type": "helm/chart"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": true
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "f90a79ae-2472-4cac-b82e-47ca7c870186",
+        "reference": "s3://aw-blg-sandbox-dev-chartmuseum/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/dev-values.yaml",
+        "type": "s3/object"
+      },
+      "displayName": "dev-service-haven-activities-capacity-values",
+      "id": "9ec2c388-6eea-4fe9-bfec-44dc667afa13",
+      "matchArtifact": {
+        "artifactAccount": "aws-blg-s3-prod",
+        "id": "c1c479c6-47d6-4e19-b3f5-17c1ef9429b3",
+        "name": "s3://aw-blg-sandbox-dev-chartmuseum/haven/activities/service-haven-activities-capacity/${ parameters[\"image_tag\"] }/dev-values.yaml",
+        "type": "s3/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": false,
+  "parameterConfig": [
+    {
+      "default": "",
+      "description": "Docker tag of the image to be deployed",
+      "hasOptions": false,
+      "label": "Image Tag",
+      "name": "image_tag",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "Manually Triggered",
+      "description": "Build number of the Jenkins job which triggered this pipeline",
+      "hasOptions": false,
+      "label": "Jenkins Build Number",
+      "name": "jenkins_build_number",
+      "options": [
+        {
+          "value": ""
+        }
+      ],
+      "pinned": true,
+      "required": false
+    }
+  ],
+  "spelEvaluator": "v4",
+  "stages": [
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "evaluateOverrideExpressions": true,
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "customKind": true,
+            "id": "7ef8c4fd-ed33-4c2a-939d-dd966091cdc6"
+          },
+          "displayName": "staging-service-haven-activities-capacity-manifests",
+          "id": "430adc55-57a5-4253-af6b-17ad2155d463",
+          "matchArtifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "46356a9c-b516-42f5-8882-d9552ed0bd30",
+            "name": "staging-service-haven-activities-capacity-manifests",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "failPipeline": true,
+      "inputArtifacts": [
+        {
+          "account": "",
+          "id": "f3fc5760-ec82-46e5-b145-95b91d0b987b"
+        },
+        {
+          "account": "",
+          "id": "a7abe8d1-6283-4848-bcfc-6ecce70679ee"
+        }
+      ],
+      "name": "Create Staging Deployment Manifests",
+      "namespace": "staging-haven-activities",
+      "outputName": "service-haven-activities-capacity",
+      "overrides": {},
+      "rawOverrides": true,
+      "refId": "1",
+      "requisiteStageRefIds": ["8"],
+      "templateRenderer": "HELM3",
+      "type": "bakeManifest"
+    },
+    {
+      "account": "blg-dev-cluster",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactId": "430adc55-57a5-4253-af6b-17ad2155d463",
+      "moniker": {
+        "app": "service-haven-activities-capacity"
+      },
+      "name": "Deploy to Staging",
+      "namespaceOverride": "staging-haven-activities",
+      "refId": "2",
+      "requisiteStageRefIds": ["8", "1"],
+      "skipExpressionEvaluation": true,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": true,
+          "namespace": "staging-haven-activities",
+          "services": ["service service-haven-activities-capacity"],
+          "strategy": "redblack"
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "failPipeline": true,
+      "instructions": "Click continue to promote this build ( Docker image tag: ${ parameters[\"image_tag\"] } and Jenkins job number: ${ parameters[\"jenkins_build_number\"] } ) to the production environment?",
+      "judgmentInputs": [],
+      "name": "Approve Production Deployment",
+      "notifications": [],
+      "refId": "3",
+      "requisiteStageRefIds": ["2"],
+      "type": "manualJudgment"
+    },
+    {
+      "evaluateOverrideExpressions": true,
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "customKind": true,
+            "id": "8f13c88b-d2bc-4064-bfee-076a39e0bba3"
+          },
+          "displayName": "prod-service-haven-activities-capacity-manifests",
+          "id": "4a44c614-e37d-49f2-9bd4-6dbd8f5567f6",
+          "matchArtifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "fbd51bb0-22fe-4af1-b4c9-501ecb69eb8d",
+            "name": "prod-service-haven-activities-capacity-manifests",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "inputArtifacts": [
+        {
+          "account": "",
+          "id": "f3fc5760-ec82-46e5-b145-95b91d0b987b"
+        },
+        {
+          "account": "",
+          "id": "c7704532-bc99-4cf2-801f-ea077394aac4"
+        }
+      ],
+      "name": "Create Production Deployment Manifests",
+      "namespace": "prod-haven-activities",
+      "outputName": "service-haven-activities-capacity",
+      "overrides": {},
+      "rawOverrides": true,
+      "refId": "4",
+      "requisiteStageRefIds": ["3"],
+      "templateRenderer": "HELM3",
+      "type": "bakeManifest"
+    },
+    {
+      "account": "aws-prod-kube-cluster-01",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactId": "4a44c614-e37d-49f2-9bd4-6dbd8f5567f6",
+      "moniker": {
+        "app": "service-haven-activities-capacity"
+      },
+      "name": "Deploy to Production",
+      "namespaceOverride": "prod-haven-activities",
+      "refId": "5",
+      "requisiteStageRefIds": ["3", "4"],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": true,
+          "namespace": "prod-haven-activities",
+          "services": ["service service-haven-activities-capacity"],
+          "strategy": "redblack"
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "evaluateOverrideExpressions": true,
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "customKind": true,
+            "id": "1ce57897-2e14-4bb9-9035-b50129891f34"
+          },
+          "displayName": "dev-service-haven-activities-capacity-manifests",
+          "id": "a8d8b8b5-b902-4fd3-ba6a-ec4df97afab0",
+          "matchArtifact": {
+            "artifactAccount": "embedded-artifact",
+            "id": "f19acd93-0347-4403-927a-c2e893157e01",
+            "name": "dev-service-haven-activities-capacity-manifests",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "inputArtifacts": [
+        {
+          "account": "",
+          "id": "f3fc5760-ec82-46e5-b145-95b91d0b987b"
+        },
+        {
+          "account": "",
+          "id": "9ec2c388-6eea-4fe9-bfec-44dc667afa13"
+        }
+      ],
+      "name": "Create Dev Deployment Manifests",
+      "namespace": "dev-haven-activities",
+      "outputName": "service-haven-activities-capacity",
+      "overrides": {},
+      "rawOverrides": true,
+      "refId": "6",
+      "requisiteStageRefIds": [],
+      "templateRenderer": "HELM3",
+      "type": "bakeManifest"
+    },
+    {
+      "account": "blg-dev-cluster",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactId": "a8d8b8b5-b902-4fd3-ba6a-ec4df97afab0",
+      "moniker": {
+        "app": "service-haven-activities-capacity"
+      },
+      "name": "Deploy to Dev",
+      "namespaceOverride": "dev-haven-activities",
+      "refId": "7",
+      "requisiteStageRefIds": ["6"],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": true,
+          "namespace": "dev-haven-activities",
+          "services": ["service service-haven-activities-capacity"],
+          "strategy": "redblack"
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "failPipeline": true,
+      "instructions": "Click continue to promote this build ( Docker image tag: ${ parameters[\"image_tag\"] } and Jenkins job number: ${ parameters[\"jenkins_build_number\"] } ) to the staging environment?",
+      "judgmentInputs": [],
+      "name": "Approve Staging Deployment",
+      "notifications": [],
+      "refId": "8",
+      "requisiteStageRefIds": ["7"],
+      "type": "manualJudgment"
+    }
+  ],
+  "triggers": [
+    {
+      "enabled": true,
+      "expectedArtifactIds": [
+        "a7abe8d1-6283-4848-bcfc-6ecce70679ee",
+        "c7704532-bc99-4cf2-801f-ea077394aac4",
+        "f3fc5760-ec82-46e5-b145-95b91d0b987b",
+        "9ec2c388-6eea-4fe9-bfec-44dc667afa13"
+      ],
+      "payloadConstraints": {},
+      "source": "service-haven-activities-capacity",
+      "type": "webhook"
+    }
+  ],
+  "updateTs": "1607874445000"
+}
