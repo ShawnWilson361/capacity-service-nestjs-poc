@@ -12,6 +12,9 @@ import createNestAppHelper from '../helpers/createNestApp.helper';
 import { createEntitySource } from '../helpers/entitySource.helper';
 import setupTestingModuleHelper from '../helpers/setupTestingModule.helper';
 
+/**
+ * @group integration
+ */
 describe('integration - management - entity source - v1', () => {
   let app: INestApplication;
   let server: any;
@@ -115,6 +118,7 @@ describe('integration - management - entity source - v1', () => {
           }),
         ],
         query: {
+          filters: {},
           limit: 50,
           orderBy: 'id',
           orderDirection: 'ASC',

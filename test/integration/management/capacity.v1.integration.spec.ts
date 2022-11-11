@@ -19,6 +19,9 @@ import { createCapacityChange } from '../helpers/capacityChange.helper';
 import createNestAppHelper from '../helpers/createNestApp.helper';
 import setupTestingModuleHelper from '../helpers/setupTestingModule.helper';
 
+/**
+ * @group integration
+ */
 describe('integration - management - capacity - v1', () => {
   let app: INestApplication;
   let server: any;
@@ -134,6 +137,7 @@ describe('integration - management - capacity - v1', () => {
           }),
         ]),
         query: {
+          filters: {},
           limit: 50,
           orderBy: 'id',
           orderDirection: 'ASC',

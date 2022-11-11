@@ -8,6 +8,8 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -95,6 +97,7 @@ export class CapacityV1Controller {
   })
   @HttpCode(200)
   @ApiOperation({ summary: 'Get multiple capacities' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/batch')
   async getCapacities(
     @Body() body: PublicCapacityListPayload
@@ -119,6 +122,7 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Get a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Get('/:id')
   async getCapacity(@Param('id') id: string): Promise<PublicCapacityResponse> {
     const item = await this.capacityService.getCapacityById(id);
@@ -146,6 +150,7 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create one or many capacities' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/batch/create')
   async createCapacities(
     @Body() body: PublicCapacityBatchCreatePayload
@@ -177,6 +182,9 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create a capacity' })
+  @UsePipes(
+    new ValidationPipe({ transform: true, skipMissingProperties: true })
+  )
   @Post('/')
   async createCapacity(
     @Body() body: PublicCapacityPayload
@@ -229,6 +237,9 @@ export class CapacityV1Controller {
     schema: { type: 'boolean' },
   })
   @ApiOperation({ summary: 'Reserve or free a specific amount of a capacity' })
+  @UsePipes(
+    new ValidationPipe({ transform: true, skipMissingProperties: true })
+  )
   @Patch('/')
   async updateCapacity(
     @Body() body: PublicCapacityModificationPayload,

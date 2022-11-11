@@ -6,6 +6,7 @@ ARG REGISTRY_BASE=public.ecr.aws/docker/library/node
 FROM ${REGISTRY_BASE}:16-alpine as builder
 WORKDIR /usr/src/app
 COPY package*.json ./
+COPY yarn.lock ./
 COPY .npmrc ./
 COPY tsconfig.json ./
 RUN yarn install --frozen-lockfile

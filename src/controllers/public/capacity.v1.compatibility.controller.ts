@@ -1,4 +1,12 @@
-import { Body, Controller, Headers, Inject, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Headers,
+  Inject,
+  Patch,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiHeader,
@@ -69,6 +77,7 @@ export class CapacityV1CompatibilityController {
     schema: { type: 'string' },
   })
   @ApiOperation({ summary: 'Update a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Patch('/')
   async updateCapacity(
     @Body() body: PublicCapacityOverridePayload,

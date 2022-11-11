@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { AsyncContext } from '@nestjs-steroids/async-context';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   DocumentBuilder,
@@ -129,6 +129,8 @@ async function bootstrap() {
   const asyncContext = await app.resolve<AsyncContext<string, any>>(
     AsyncContext
   );
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.useGlobalInterceptors(new AsyncContextInterceptor(asyncContext));
 

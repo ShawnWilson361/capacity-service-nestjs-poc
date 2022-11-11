@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -99,6 +101,9 @@ export class EntitySourceV1Controller {
     schema: { $ref: getSchemaPath(ManagementEntitySourceFilters) },
   })
   @ApiOperation({ summary: 'Get list of entity sources' })
+  @UsePipes(
+    new ValidationPipe({ transform: true, skipMissingProperties: true })
+  )
   @Get('/')
   async getEntitySources(
     @Query('filters') filters?: ManagementEntitySourceFilters,
@@ -134,6 +139,7 @@ export class EntitySourceV1Controller {
   })
   @ApiParam({ name: 'id', type: String })
   @ApiOperation({ summary: 'Get an entity source' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Get('/:id')
   async getEntitySourceById(
     @Param('id') id: string
@@ -158,6 +164,7 @@ export class EntitySourceV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create an entity source' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/')
   async createEntitySource(
     @Body() body: ManagementEntitySourcePayload
@@ -188,6 +195,7 @@ export class EntitySourceV1Controller {
   })
   @ApiOperation({ summary: 'Update an entity source' })
   @ApiParam({ name: 'id', type: String })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Put('/:id')
   async updateEntitySource(
     @Param('id') id: string,
@@ -220,6 +228,7 @@ export class EntitySourceV1Controller {
   })
   @ApiOperation({ summary: 'Delete an entity source' })
   @ApiParam({ name: 'id', type: String })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Delete('/:id')
   async deleteEntitySource(
     @Param('id') id: string

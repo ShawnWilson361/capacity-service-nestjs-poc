@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -103,6 +105,9 @@ export class CapacityV1Controller {
     schema: { $ref: getSchemaPath(ManagementCapacityFilters) },
   })
   @ApiOperation({ summary: 'Get list of capacities' })
+  @UsePipes(
+    new ValidationPipe({ transform: true, skipMissingProperties: true })
+  )
   @Get('/')
   async getCapacityList(
     @Query('filters') filters?: ManagementCapacityFilters,
@@ -138,6 +143,7 @@ export class CapacityV1Controller {
   })
   @ApiParam({ name: 'id', type: String })
   @ApiOperation({ summary: 'Get a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Get('/:id')
   async getCapacityById(
     @Param('id') id: string
@@ -167,6 +173,7 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/')
   async createCapacity(
     @Body() body: ManagementCapacityPayload
@@ -201,6 +208,7 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Update a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @ApiParam({ name: 'id', type: String })
   @Put('/:id')
   async updateCapacity(
@@ -231,6 +239,7 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Delete a capacity' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @ApiParam({ name: 'id', type: String })
   @Delete('/:id')
   async deleteCapacity(

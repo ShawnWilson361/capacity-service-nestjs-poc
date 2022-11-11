@@ -6,6 +6,9 @@ import { integrationSeed } from '../../src/seeds/integrationSeed';
 import createNestAppHelper from './helpers/createNestApp.helper';
 import setupTestingModuleHelper from './helpers/setupTestingModule.helper';
 
+/**
+ * @group integration
+ */
 describe('integration - service info', () => {
   let app: INestApplication;
   let server: any;
