@@ -277,8 +277,8 @@ describe('integration - public - capacity - v1', () => {
       expect(response.statusCode).toEqual(500);
       expect(response.body).toEqual({
         code: null,
-        status: 500,
         message: 'error',
+        status: 500,
         success: false,
       });
     });

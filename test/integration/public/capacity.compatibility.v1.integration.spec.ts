@@ -349,8 +349,8 @@ describe('integration - public - capacity - compatibility', () => {
       expect(response.statusCode).toEqual(500);
       expect(response.body).toEqual({
         code: null,
-        status: 500,
         message: 'error',
+        status: 500,
         success: false,
       });
     });
@@ -384,7 +384,7 @@ describe('integration - public - capacity - compatibility', () => {
       });
     });
 
-    it('returns 400 if capacity to update does not exist and usedCapacity is missing', async () => {
+    it('returns 422 if capacity to update does not exist and usedCapacity is missing', async () => {
       const { usedCapacity, ...capacityInfo } = createCapacityInfo({
         entityId: uuid(),
       });
@@ -399,14 +399,12 @@ describe('integration - public - capacity - compatibility', () => {
           'x-guest-reference-id': '123456',
         });
 
-      expect(response.statusCode).toEqual(400);
-      expect(response.body).toStrictEqual(
-        expect.objectContaining({
-          code: 'BAD_REQUEST',
-          status: 400,
-          success: false,
-        })
-      );
+      expect(response.statusCode).toEqual(422);
+      expect(response.body).toStrictEqual({
+        error: 'Bad Request',
+        message: 'Used Capacity is required',
+        statusCode: 400,
+      });
     });
   });
 });

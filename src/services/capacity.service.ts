@@ -1,4 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, QueryRunner } from 'typeorm';
 
@@ -156,6 +161,14 @@ export class CapacityService {
         capacityInfo.entityId,
         entitySourceId
       );
+
+    if (
+      !originalCapacity &&
+      capacityInfo.usedCapacity !== 0 &&
+      !capacityInfo.usedCapacity
+    ) {
+      throw new BadRequestException('Used Capacity is required');
+    }
 
     const updatedCapacity = await this.capacityRepository.upsertCapacity(
       {

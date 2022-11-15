@@ -4,6 +4,7 @@ import {
   Headers,
   Inject,
   Patch,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
+import { ValidationFilter } from '../../filters/validation.filter';
 import { CapacityService } from '../../services/capacity.service';
 import { ConfigService } from '../../services/config.service';
 import { PublicCapacityOverridePayload } from '../../types/requestBody';
@@ -77,7 +79,13 @@ export class CapacityV1CompatibilityController {
     schema: { type: 'string' },
   })
   @ApiOperation({ summary: 'Update a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Patch('/')
   async updateCapacity(
     @Body() body: PublicCapacityOverridePayload,

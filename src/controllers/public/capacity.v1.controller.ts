@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
+import { ValidationFilter } from '../../filters/validation.filter';
 import { CapacityService } from '../../services/capacity.service';
 import { CapacityChangeService } from '../../services/capacityChange.service';
 import { ConfigService } from '../../services/config.service';
@@ -97,7 +99,13 @@ export class CapacityV1Controller {
   })
   @HttpCode(200)
   @ApiOperation({ summary: 'Get multiple capacities' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Post('/batch')
   async getCapacities(
     @Body() body: PublicCapacityListPayload
@@ -122,7 +130,12 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Get a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Get('/:id')
   async getCapacity(@Param('id') id: string): Promise<PublicCapacityResponse> {
     const item = await this.capacityService.getCapacityById(id);
@@ -150,7 +163,12 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create one or many capacities' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Post('/batch/create')
   async createCapacities(
     @Body() body: PublicCapacityBatchCreatePayload
@@ -183,8 +201,12 @@ export class CapacityV1Controller {
   })
   @ApiOperation({ summary: 'Create a capacity' })
   @UsePipes(
-    new ValidationPipe({ transform: true, skipMissingProperties: true })
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+    })
   )
+  @UseFilters(ValidationFilter)
   @Post('/')
   async createCapacity(
     @Body() body: PublicCapacityPayload
@@ -238,8 +260,12 @@ export class CapacityV1Controller {
   })
   @ApiOperation({ summary: 'Reserve or free a specific amount of a capacity' })
   @UsePipes(
-    new ValidationPipe({ transform: true, skipMissingProperties: true })
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+    })
   )
+  @UseFilters(ValidationFilter)
   @Patch('/')
   async updateCapacity(
     @Body() body: PublicCapacityModificationPayload,

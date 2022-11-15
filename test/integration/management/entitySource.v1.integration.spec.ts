@@ -8,6 +8,7 @@ import config from '../../../src/config';
 import { EntitySource } from '../../../src/entities';
 import { EntitySourceRepository } from '../../../src/repositories';
 import { integrationSeed } from '../../../src/seeds/integrationSeed';
+import { ManagementEntitySourceItem } from '../../../src/types/shared';
 import createNestAppHelper from '../helpers/createNestApp.helper';
 import { createEntitySource } from '../helpers/entitySource.helper';
 import setupTestingModuleHelper from '../helpers/setupTestingModule.helper';
@@ -292,7 +293,8 @@ describe('integration - management - entity source - v1', () => {
         .send({
           entitySource: {
             name: 'test',
-          },
+            keyReference: 'ABC123',
+          } as ManagementEntitySourceItem,
         })
         .set(authHeaders);
 

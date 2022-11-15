@@ -11,6 +11,7 @@ import {
   CapacityRepository,
 } from '../../../src/repositories';
 import { integrationSeed } from '../../../src/seeds/integrationSeed';
+import { ManagementCapacityItem } from '../../../src/types/shared';
 import {
   createCapacity,
   createEntityResponse,
@@ -304,7 +305,7 @@ describe('integration - management - capacity - v1', () => {
             heldCapacity: capacity.heldCapacity,
             isLive: capacity.isLive,
             entitySourceId,
-          } as Partial<Capacity>,
+          } as Partial<ManagementCapacityItem>,
         })
         .set(authHeaders);
 

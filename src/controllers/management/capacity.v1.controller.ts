@@ -4,10 +4,12 @@ import {
   Delete,
   Get,
   Inject,
+  NotFoundException,
   Param,
   Post,
   Put,
   Query,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -23,6 +25,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
+import { ValidationFilter } from '../../filters/validation.filter';
 import { CapacityService } from '../../services/capacity.service';
 import { OrderDirection } from '../../types/enums';
 import { ManagementCapacityFilters } from '../../types/queryParams';
@@ -106,8 +109,14 @@ export class CapacityV1Controller {
   })
   @ApiOperation({ summary: 'Get list of capacities' })
   @UsePipes(
-    new ValidationPipe({ transform: true, skipMissingProperties: true })
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
   )
+  @UseFilters(ValidationFilter)
   @Get('/')
   async getCapacityList(
     @Query('filters') filters?: ManagementCapacityFilters,
@@ -143,12 +152,25 @@ export class CapacityV1Controller {
   })
   @ApiParam({ name: 'id', type: String })
   @ApiOperation({ summary: 'Get a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Get('/:id')
   async getCapacityById(
     @Param('id') id: string
   ): Promise<ManagementCapacityResponse> {
     const item = await this.capacityService.getCapacityById(id);
+
+    if (!item) {
+      throw new NotFoundException(
+        `Capacity with Id '${id}' could not be found`
+      );
+    }
 
     return {
       success: true,
@@ -173,7 +195,15 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Post('/')
   async createCapacity(
     @Body() body: ManagementCapacityPayload
@@ -208,8 +238,16 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Update a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
   @ApiParam({ name: 'id', type: String })
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Put('/:id')
   async updateCapacity(
     @Body() body: ManagementCapacityPayload
@@ -239,8 +277,15 @@ export class CapacityV1Controller {
     },
   })
   @ApiOperation({ summary: 'Delete a capacity' })
-  @UsePipes(new ValidationPipe({ transform: true }))
   @ApiParam({ name: 'id', type: String })
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Delete('/:id')
   async deleteCapacity(
     @Param('id') id: string

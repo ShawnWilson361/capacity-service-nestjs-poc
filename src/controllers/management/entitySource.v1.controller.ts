@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -23,6 +24,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
+import { ValidationFilter } from '../../filters/validation.filter';
 import { EntitySourceService } from '../../services/entitySource.service';
 import { OrderDirection } from '../../types/enums';
 import { ManagementEntitySourceFilters } from '../../types/queryParams';
@@ -102,8 +104,14 @@ export class EntitySourceV1Controller {
   })
   @ApiOperation({ summary: 'Get list of entity sources' })
   @UsePipes(
-    new ValidationPipe({ transform: true, skipMissingProperties: true })
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
   )
+  @UseFilters(ValidationFilter)
   @Get('/')
   async getEntitySources(
     @Query('filters') filters?: ManagementEntitySourceFilters,
@@ -139,7 +147,14 @@ export class EntitySourceV1Controller {
   })
   @ApiParam({ name: 'id', type: String })
   @ApiOperation({ summary: 'Get an entity source' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Get('/:id')
   async getEntitySourceById(
     @Param('id') id: string
@@ -164,7 +179,16 @@ export class EntitySourceV1Controller {
     },
   })
   @ApiOperation({ summary: 'Create an entity source' })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiParam({ name: 'id', type: String })
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Post('/')
   async createEntitySource(
     @Body() body: ManagementEntitySourcePayload
@@ -195,7 +219,15 @@ export class EntitySourceV1Controller {
   })
   @ApiOperation({ summary: 'Update an entity source' })
   @ApiParam({ name: 'id', type: String })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Put('/:id')
   async updateEntitySource(
     @Param('id') id: string,
@@ -228,7 +260,14 @@ export class EntitySourceV1Controller {
   })
   @ApiOperation({ summary: 'Delete an entity source' })
   @ApiParam({ name: 'id', type: String })
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
   @Delete('/:id')
   async deleteEntitySource(
     @Param('id') id: string
