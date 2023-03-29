@@ -6,7 +6,6 @@ import { ApplicationErrorLevel } from '../errors/types/ApplicationErrorLevel';
 import { IErrorResponse } from '../errors/types/IErrorResponse';
 import { IErrorResponseFormatter } from '../errors/types/IErrorResponseFormatter';
 import { getDefaultErrorResponse } from '../utils/getDefaultErrorResponse';
-import { HttpErrorStatusCodeToCodeMap } from '../utils/httpErrorStatusCodeToCodeMap';
 
 @Catch()
 export class ApplicationErrorFilter implements ExceptionFilter {
