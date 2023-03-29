@@ -28,6 +28,32 @@ const responseDtos = Object.values(ResponseDtos || {});
 const queryParamsDtos = Object.values(QueryParamsDtos || {});
 const sharedDtos = Object.values(SharedDtos || {});
 
+const createAllEndpointsSwagger = (app: INestApplication): void => {
+  const endpointsConfig = new DocumentBuilder()
+    .setTitle('Haven Activities Capacity Service endpoints')
+    .setVersion('2.0.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, endpointsConfig, {
+    include: [
+      PublicModule,
+      ManagementModule,
+      EntitySourceModule,
+      InfrastructureModule,
+    ],
+    extraModels: [...responseDtos, ...queryParamsDtos, ...sharedDtos],
+  });
+
+  const theme = new SwaggerTheme('v3');
+  const options: SwaggerCustomOptions = {
+    explorer: true,
+    customCss: theme.getBuffer('dark'),
+    customSiteTitle: 'Haven Activities Capacity Service OpenAPI Documentation',
+  };
+
+  SwaggerModule.setup('/api', app, document, options);
+};
+
 const createPublicEndpointsSwagger = (app: INestApplication): void => {
   const endpointsConfig = new DocumentBuilder()
     .setTitle('Haven Activities Capacity Service Public endpoints')
@@ -44,7 +70,7 @@ const createPublicEndpointsSwagger = (app: INestApplication): void => {
     explorer: true,
     customCss: theme.getBuffer('dark'),
     customSiteTitle:
-      'Haven Activities Capacity Service Management Public Documentation',
+      'Haven Activities Capacity Service Public OpenAPI Documentation',
   };
 
   SwaggerModule.setup('/public/api', app, document, options);
@@ -88,7 +114,7 @@ const createEntitySourceEndpointsSwagger = (app: INestApplication): void => {
     explorer: true,
     customCss: theme.getBuffer('dark'),
     customSiteTitle:
-      'Haven Activities Capacity Service Management Entity Source Documentation',
+      'Haven Activities Capacity Service Entity Source OpenAPI Documentation',
   };
 
   SwaggerModule.setup('/entitySource/api', app, document, options);
@@ -119,6 +145,7 @@ const createInfrastructureEndpointsSwagger = (app: INestApplication): void => {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  createAllEndpointsSwagger(app);
   createPublicEndpointsSwagger(app);
   createManagementEndpointsSwagger(app);
   createEntitySourceEndpointsSwagger(app);

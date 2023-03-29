@@ -1,8 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
-import { HttpError } from '@havenengineering/module-shared-typedrouter';
-
 import { ApplicationError } from '../errors/ApplicationError.error';
 import { ApplicationErrorLevel } from '../errors/types/ApplicationErrorLevel';
 import { IErrorResponse } from '../errors/types/IErrorResponse';
@@ -21,19 +19,6 @@ export class ApplicationErrorFilter implements ExceptionFilter {
       formatter: (error: Error): IErrorResponseFormatter => ({
         errorLevel: ApplicationErrorLevel.error,
         errorResponse: getDefaultErrorResponse(error),
-      }),
-    },
-    {
-      condition: (error: Error): boolean => error instanceof HttpError,
-      formatter: (error: HttpError): IErrorResponseFormatter => ({
-        errorLevel: ApplicationErrorLevel.warn,
-        errorResponse: {
-          ...getDefaultErrorResponse(error),
-          message: error.message,
-          errors: error.errors,
-          status: error.status,
-          code: HttpErrorStatusCodeToCodeMap[error.status] || null,
-        } as IErrorResponse,
       }),
     },
     {
