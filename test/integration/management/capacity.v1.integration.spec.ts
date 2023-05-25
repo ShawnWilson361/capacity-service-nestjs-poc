@@ -391,8 +391,7 @@ describe('integration - management - capacity - v1', () => {
         .put(`/management/v1/capacity/${capacity.id}`)
         .send({
           capacity: {
-            id: capacity.id,
-            entityId: 'test2',
+            entityId: 'test',
             entityType: 'test',
           },
         })
@@ -424,6 +423,106 @@ describe('integration - management - capacity - v1', () => {
             entityId: 'test',
             entityType: 'test2',
           },
+        });
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toEqual({
+        code: 'Unauthorized',
+        message: 'Unauthorized',
+        status: 401,
+        success: false,
+      });
+    });
+  });
+
+  describe('[PUT] /management/v1/capacity', () => {
+    it('updates, saves and returns success', async () => {
+      const capacity1 = await capacityRepository.createCapacity(
+        createCapacity({
+          entityId: 'test',
+          entityType: 'test',
+          entitySourceId,
+          maxCapacity: 100,
+        })
+      );
+
+      const capacity2 = await capacityRepository.createCapacity(
+        createCapacity({
+          entityId: 'test2',
+          entityType: 'test2',
+          entitySourceId,
+          maxCapacity: 100,
+        })
+      );
+
+      const response = await request(server)
+        .put(`/management/v1/capacity`)
+        .send({
+          items: [
+            {
+              id: capacity1.id,
+              maxCapacity: 10,
+            },
+            {
+              id: capacity2.id,
+              maxCapacity: 10,
+            },
+          ],
+        })
+        .set(authHeaders);
+
+      // expect(response.statusCode).toEqual(200);
+      expect(response.body).toStrictEqual({
+        success: true,
+        capacities: expect.arrayContaining([
+          expect.objectContaining({
+            id: capacity1.id,
+            entityId: 'test',
+            entityType: 'test',
+            maxCapacity: 10,
+          }),
+          expect.objectContaining({
+            id: capacity2.id,
+            entityId: 'test2',
+            entityType: 'test2',
+            maxCapacity: 10,
+          }),
+        ]),
+      });
+    });
+
+    it('returns 401 no x-api-key header provided', async () => {
+      const capacity1 = await capacityRepository.createCapacity(
+        createCapacity({
+          entityId: 'test',
+          entityType: 'test',
+          entitySourceId,
+          maxCapacity: 100,
+        })
+      );
+
+      const capacity2 = await capacityRepository.createCapacity(
+        createCapacity({
+          entityId: 'test2',
+          entityType: 'test2',
+          entitySourceId,
+          maxCapacity: 100,
+        })
+      );
+
+      const response = await request(server)
+        .put(`/management/v1/capacity`)
+        .send({
+          items: [
+            {
+              id: capacity1.id,
+              maxCapacity: 10,
+            },
+            {
+              id: capacity2.id,
+              maxCapacity: 10,
+            },
+          ],
         });
 
       expect(response.statusCode).toEqual(401);

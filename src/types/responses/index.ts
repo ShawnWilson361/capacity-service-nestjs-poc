@@ -2,6 +2,7 @@ export * from './ErrorResponse.dto';
 export * from './GenericDeleteResponse.dto';
 export * from './GetHealthResponse.dto';
 export * from './GetServiceInfoResponse.dto';
+export * from './ManagementCapacitiesResponse.dto';
 export * from './ManagementCapacityListQuery.dto';
 export * from './ManagementCapacityListResponse.dto';
 export * from './ManagementCapacityResponse.dto';

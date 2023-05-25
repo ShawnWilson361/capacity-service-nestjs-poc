@@ -126,7 +126,7 @@ export class CapacityRepository extends Repository<Capacity> {
   }
 
   /* Update */
-  async updateCapacity(
+  async updateCapacityByEntityId(
     partial: Partial<Capacity>,
     queryRunner?: QueryRunner
   ): Promise<Capacity> {
@@ -143,6 +143,34 @@ export class CapacityRepository extends Repository<Capacity> {
       .set(partial)
       .where({
         entityId: partial.entityId,
+      })
+      .returning('*')
+      .execute();
+
+    if (result.affected < 1) {
+      throw new ApplicationError('No update', 400);
+    }
+
+    return result.raw[0] as Capacity;
+  }
+
+  async updateCapacityById(
+    partial: Partial<Capacity>,
+    queryRunner?: QueryRunner
+  ): Promise<Capacity> {
+    let qr: SelectQueryBuilder<Capacity>;
+
+    if (queryRunner) {
+      qr = queryRunner.manager.createQueryBuilder();
+    } else {
+      qr = this.createQueryBuilder();
+    }
+
+    const result = await qr
+      .update(Capacity)
+      .set(partial)
+      .where({
+        id: partial.id,
       })
       .returning('*')
       .execute();
@@ -207,7 +235,7 @@ export class CapacityRepository extends Repository<Capacity> {
     );
 
     if (exists) {
-      return await this.updateCapacity(partial, queryRunner);
+      return await this.updateCapacityByEntityId(partial, queryRunner);
     } else {
       if (typeof partial.usedCapacity !== 'number') {
         throw new ApplicationError(

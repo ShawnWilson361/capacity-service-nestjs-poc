@@ -29,10 +29,14 @@ import { ValidationFilter } from '../../filters/validation.filter';
 import { CapacityService } from '../../services/capacity.service';
 import { OrderDirection } from '../../types/enums';
 import { ManagementCapacityFilters } from '../../types/queryParams';
-import { ManagementCapacityPayload } from '../../types/requestBody';
+import {
+  ManagementCapacitiesPayload,
+  ManagementCapacityPayload,
+} from '../../types/requestBody';
 import {
   ErrorResponse,
   GenericDeleteResponse,
+  ManagementCapacitiesResponse,
   ManagementCapacityListResponse,
   ManagementCapacityResponse,
 } from '../../types/responses';
@@ -219,6 +223,37 @@ export class CapacityV1Controller {
       success: true,
       capacity: mapCapacityToManagementCapacityItem(item),
     };
+  }
+
+  @ApiOkResponse({
+    schema: {
+      $ref: getSchemaPath(ManagementCapacitiesResponse),
+    },
+  })
+  @ApiBadRequestResponse({
+    schema: {
+      $ref: getSchemaPath(ErrorResponse),
+    },
+  })
+  @ApiUnauthorizedResponse({
+    status: 401,
+    schema: {
+      $ref: getSchemaPath(ErrorResponse),
+    },
+  })
+  @ApiOperation({ summary: 'Update many capacities' })
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      skipMissingProperties: true,
+    })
+  )
+  @UseFilters(ValidationFilter)
+  @Put('/')
+  async updateCapacities(
+    @Body() body: ManagementCapacitiesPayload
+  ): Promise<ManagementCapacitiesResponse> {
+    return await this.capacityService.updateCapacities(body.items);
   }
 
   @ApiOkResponse({

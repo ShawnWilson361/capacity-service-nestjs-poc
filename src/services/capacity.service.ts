@@ -10,8 +10,10 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { Capacity } from '../entities';
 import { ApplicationError } from '../errors/ApplicationError.error';
 import { CapacityChangeRepository, CapacityRepository } from '../repositories';
+import { ManagementCapacityMaxCapacityChangeItem } from '../types/requestBody';
 import {
   GenericDeleteResponse,
+  ManagementCapacitiesResponse,
   ManagementCapacityListQuery,
   ManagementCapacityListResponse,
   ManagementCapacityResponse,
@@ -126,12 +128,49 @@ export class CapacityService {
   async updateCapacity(
     partial: Partial<Capacity>
   ): Promise<ManagementCapacityResponse> {
-    const item = await this.capacityRepository.updateCapacity(partial);
+    const item = await this.capacityRepository.updateCapacityById(partial);
 
     return {
       success: true,
       capacity: mapCapacityToManagementCapacityItem(item),
     };
+  }
+
+  async updateCapacities(
+    capacities: ManagementCapacityMaxCapacityChangeItem[]
+  ): Promise<ManagementCapacitiesResponse> {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
+      const savedCapacities: Capacity[] = [];
+
+      for (const capacity of capacities) {
+        if (capacity?.id) {
+          const cap = await this.capacityRepository.updateCapacityById(
+            capacity,
+            queryRunner
+          );
+
+          savedCapacities.push(cap);
+        }
+      }
+
+      await queryRunner.commitTransaction();
+      return {
+        success: true,
+        capacities: savedCapacities.map(mapCapacityToManagementCapacityItem),
+      };
+    } catch (e) {
+      this.logger.error(e);
+      await queryRunner.rollbackTransaction();
+      throw e;
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      await queryRunner.release();
+    }
   }
 
   async deleteCapacity(id: string): Promise<GenericDeleteResponse> {

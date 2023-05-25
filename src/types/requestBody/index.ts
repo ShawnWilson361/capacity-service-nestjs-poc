@@ -1,3 +1,5 @@
+export * from './ManagementCapacitiesPayload.dto';
+export * from './ManagementCapacityMaxCapacityChangeItem.dto';
 export * from './ManagementCapacityPayload.dto';
 export * from './ManagementEntitySourcePayload.dto';
 export * from './PublicCapacityBatchCreatePayload.dto';
