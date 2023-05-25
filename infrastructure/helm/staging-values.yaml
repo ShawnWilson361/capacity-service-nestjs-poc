@@ -50,6 +50,8 @@ deployments:
     node_env: 'production'
     node_config_env: 'staging'
     dd_trace_sample_rate: '0.0001'
+  annotations:
+    ad.datadoghq.com/tags: '{"squad": "activities","tribe": "experience"}'
 
 # Liveness & Readiness probe settings
 liveness_probe:

@@ -51,6 +51,8 @@ deployments:
     node_config_env: 'dev'
     notification_service_url: 'http://service-haven-shared-cello.dev-haven-activities.svc:4000'
     dd_trace_sample_rate: '1'
+  annotations:
+    ad.datadoghq.com/tags: '{"squad": "activities","tribe": "experience"}'
 
 # Liveness & Readiness probe settings
 liveness_probe:

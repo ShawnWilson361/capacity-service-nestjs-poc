@@ -23,6 +23,9 @@ spec:
         {{ $key }}: {{ $val | quote }}
         {{- end}}
       annotations:
+        {{- range $key, $val := .Values.deployments.annotations }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end}}
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
       serviceAccountName: {{ .Values.deployments.name }}
