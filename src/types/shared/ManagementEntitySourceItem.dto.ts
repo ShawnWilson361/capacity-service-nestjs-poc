@@ -4,12 +4,14 @@ import {
   IsDateString,
   IsDefined,
   IsNotEmpty,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
 export class ManagementEntitySourceItem {
   @ApiProperty({ type: String, nullable: true })
   @IsString({ message: 'Capacity Change Id is a string' })
+  @IsOptional()
   id?: string;
 
   @ApiProperty({ type: String, nullable: false })
@@ -26,17 +28,21 @@ export class ManagementEntitySourceItem {
 
   @ApiProperty({ type: Boolean, nullable: true })
   @IsBoolean({ message: 'Is Live is a boolean' })
+  @IsOptional()
   isLive?: boolean;
 
   @ApiProperty({ type: String, nullable: true })
   @IsDateString({}, { message: 'Created At is a date string' })
+  @IsOptional()
   createdAt?: string;
 
   @ApiProperty({ type: String, nullable: true })
   @IsDateString({}, { message: 'Updated At is a date string' })
+  @IsOptional()
   updatedAt?: string;
 
   @ApiProperty({ type: String, nullable: true })
   @IsDateString({}, { message: 'Deleted At is a date string' })
+  @IsOptional()
   deletedAt?: string;
 }

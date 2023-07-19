@@ -49,7 +49,7 @@ import { mapCapacityToPublicCapacityItem } from '../../utils/mappers.ts';
   schema: { type: 'string' },
 })
 @ApiHeader({
-  name: ' x-api-key',
+  name: 'x-api-key',
   required: true,
   description: 'the capacity service api key',
   schema: { type: 'string' },

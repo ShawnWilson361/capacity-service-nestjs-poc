@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class PublicCapacityModificationResponse {
   @ApiProperty({ type: Boolean })
   @IsBoolean()
+  @IsOptional()
   success?: boolean;
 }

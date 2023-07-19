@@ -17,7 +17,7 @@ import { ErrorResponse, GetServiceInfoResponse } from '../types/responses';
   schema: { type: 'string' },
 })
 @ApiHeader({
-  name: ' x-api-key',
+  name: 'x-api-key',
   description: 'the capacity service api key',
   schema: { type: 'string' },
 })

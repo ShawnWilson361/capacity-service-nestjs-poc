@@ -52,7 +52,7 @@ import {
   schema: { type: 'string' },
 })
 @ApiHeader({
-  name: ' x-api-key',
+  name: 'x-api-key',
   required: true,
   description: 'the capacity service management api key',
   schema: { type: 'string' },

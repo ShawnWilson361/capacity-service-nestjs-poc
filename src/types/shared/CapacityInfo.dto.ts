@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class CapacityInfo {
   @ApiProperty({ type: String, required: true })
@@ -9,6 +9,7 @@ export class CapacityInfo {
   @ApiProperty({ type: Number })
   @IsInt({ message: 'Used Capacity is a positive integer or zero' })
   @Min(0, { message: 'ZAM Id is a positive integer or zero' })
+  @IsOptional()
   usedCapacity?: number;
 
   @ApiProperty({ type: Number, required: true })
