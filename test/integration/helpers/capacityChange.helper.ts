@@ -14,4 +14,4 @@ export const createCapacityChange = (
     updatedAt: new Date(),
     deletedAt: undefined,
     ...entity,
-  } as any as CapacityChange);
+  }) as any as CapacityChange;

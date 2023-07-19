@@ -11,4 +11,4 @@ export const createCapacityInfo = (
     entityType: 'test-type',
     entityId: uuid(),
     ...entity,
-  } as CapacityInfo);
+  }) as CapacityInfo;

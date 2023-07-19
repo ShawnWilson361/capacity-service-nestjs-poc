@@ -1,7 +1,10 @@
-tabWidth: 2
-singleQuote: true
-semi: true
-importOrder: ['^@havenengineering/(.*)$', '^[./]']
-importOrderSeparation: true
-importOrderSortSpecifiers: true
-importOrderParserPlugins: ['typescript', 'decorators-legacy']
+{
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": true,
+    "trailingComma": "es5",
+    "importOrder": ["^@havenengineering/(.*)$", "^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "importOrderParserPlugins": ["typescript", "decorators-legacy"]
+}

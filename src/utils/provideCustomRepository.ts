@@ -4,7 +4,7 @@ import { DataSource, DataSourceOptions, Repository } from 'typeorm';
 
 export function provideCustomRepository<
   Entity extends Record<string, any>,
-  Repo extends Repository<Entity>
+  Repo extends Repository<Entity>,
 >(
   entity: Type<Entity>,
   repository: Type<Repo>,

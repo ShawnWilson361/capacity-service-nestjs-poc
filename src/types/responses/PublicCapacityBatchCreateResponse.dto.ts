@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 import { PublicCapacityResponse } from './';
-import { IsOptional } from 'class-validator';
 
 export class PublicCapacityBatchCreateResponse {
   @ApiProperty({ type: [PublicCapacityResponse] })
